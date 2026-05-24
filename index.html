@@ -38,8 +38,51 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .update-time{font-size:11px;color:var(--text3);font-family:var(--mono);white-space:nowrap}
 
-/* LAYOUT */
-.page{max-width:1280px;margin:0 auto;padding:20px 24px}
+/* ── 日期导航栏 ── */
+.datebar{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  position:sticky; top:52px; z-index:90;
+}
+.datebar-inner{
+  max-width:1280px; margin:0 auto;
+  padding:0 24px;
+  display:flex; align-items:center;
+  height:46px; gap:12px;
+}
+.datebar-scroll{
+  display:flex; align-items:center; gap:4px;
+  overflow-x:auto; flex:1;
+  scrollbar-width:none; padding:6px 0;
+}
+.datebar-scroll::-webkit-scrollbar{display:none}
+.dbar-btn{
+  display:flex; flex-direction:column; align-items:center;
+  padding:4px 14px; border-radius:7px; cursor:pointer;
+  border:1px solid var(--border); background:var(--surface);
+  transition:all .15s; white-space:nowrap; flex-shrink:0;
+  font-family:var(--sans);
+}
+.dbar-btn:hover{border-color:var(--red);background:#fef9f9}
+.dbar-btn.active{background:var(--text);border-color:var(--text)}
+.dbar-btn .db-md{font-size:13px;font-weight:700;font-family:var(--mono);color:var(--text);line-height:1.2}
+.dbar-btn.active .db-md{color:#fff}
+.dbar-btn .db-wd{font-size:10px;color:var(--text3);margin-top:1px}
+.dbar-btn.active .db-wd{color:rgba(255,255,255,.55)}
+.dbar-btn.today .db-md{color:var(--red)}
+.dbar-btn.today{border-color:var(--red-border)}
+.dbar-btn.active.today .db-md{color:#fff}
+.dbar-sep{width:1px;height:24px;background:var(--border);flex-shrink:0;margin:0 2px}
+.datebar-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.datebar-tip{font-size:11px;color:var(--text3);white-space:nowrap}
+@media(max-width:768px){
+  .datebar-inner{padding:0 10px}
+  .datebar-tip{display:none}
+}
+
+/* page 要给两个sticky留空间 */
+.page{max-width:1280px;margin:0 auto;padding:16px 24px}
+
 .tab-panel{display:none}
 .tab-panel.active{display:block}
 
@@ -335,16 +378,20 @@ footer a{color:var(--text3)}
       <a onclick="switchTab('report',this)">研报快讯</a>
     </nav>
     <div class="topbar-right">
-      <div class="date-selector" id="date-selector"></div>
-      <button onclick="showJoinModal()" style="
-        background:var(--red);color:#fff;border:none;border-radius:6px;
-        padding:6px 14px;font-size:13px;font-family:var(--sans);
-        font-weight:500;cursor:pointer;white-space:nowrap;
-        transition:background .15s;flex-shrink:0;
-      " onmouseover="this.style.background='#c02020'" onmouseout="this.style.background='var(--red)'">
-        加入铁粉群
-      </button>
+      <button onclick="showJoinModal()" style="background:var(--red);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:13px;font-family:var(--sans);font-weight:500;cursor:pointer;white-space:nowrap;transition:background .15s;flex-shrink:0;" onmouseover="this.style.background='#c02020'" onmouseout="this.style.background='var(--red)'">加入铁粉群</button>
       <div class="update-time"><span class="update-dot"></span>2026-05-21 20:41</div>
+    </div>
+  </div>
+</div>
+
+<!-- 日期导航栏（独立一行） -->
+<div class="datebar" id="datebar">
+  <div class="datebar-inner">
+    <div class="datebar-scroll" id="datebar-scroll">
+      <!-- 由JS渲染 -->
+    </div>
+    <div class="datebar-right">
+      <span class="datebar-tip">← 滑动查看更早日期</span>
     </div>
   </div>
 </div>
@@ -677,17 +724,100 @@ const QSG = [
 QSG.forEach(r => { r.density = r.days > 0 ? +(r.hits/r.days*100).toFixed(1) : 0; });
 
 // ═══════════════════════════════════════════
-// INIT
+// 日期导航栏
 // ═══════════════════════════════════════════
-const dsEl = document.getElementById('date-selector');
-DATES.forEach((d,i) => {
-  const btn = document.createElement('button');
-  btn.className = 'date-btn' + (i===0?' active':'');
-  btn.textContent = d.slice(5);
-  btn.onclick = () => { dsEl.querySelectorAll('.date-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); };
-  dsEl.appendChild(btn);
-});
+const WEEKDAYS = ['周日','周一','周二','周三','周四','周五','周六'];
 
+// 生成近30个交易日（排除周六日）
+function getRecentTradingDays(n) {
+  const days = [];
+  const d = new Date();
+  while (days.length < n) {
+    const wd = d.getDay();
+    if (wd !== 0 && wd !== 6) {
+      days.push(new Date(d));
+    }
+    d.setDate(d.getDate() - 1);
+  }
+  return days;
+}
+
+function initDatebar() {
+  const scroll = document.getElementById('datebar-scroll');
+  const tradingDays = getRecentTradingDays(30);
+  const todayStr = tradingDays[0].toISOString().slice(0,10);
+
+  scroll.innerHTML = tradingDays.map((d, idx) => {
+    const dateStr = d.toISOString().slice(0,10);
+    const m = (d.getMonth()+1).toString().padStart(2,'0');
+    const day = d.getDate().toString().padStart(2,'0');
+    const wd = WEEKDAYS[d.getDay()];
+    const isToday = idx === 0;
+    const isActive = idx === 0;
+    // 近10天显示，其余可滑动看到
+    const sepHtml = idx === 9 ? '<div class="dbar-sep"></div>' : '';
+    return `${sepHtml}<button class="dbar-btn ${isActive?'active':''} ${isToday?'today':''}"
+      data-date="${dateStr}"
+      onclick="switchDate('${dateStr}', this)"
+      title="${dateStr}">
+      <span class="db-md">${m}/${day}</span>
+      <span class="db-wd">${wd}</span>
+    </button>`;
+  }).join('');
+
+  // 第一个按钮（今天）自动滚到最左
+  scroll.scrollLeft = 0;
+}
+
+function switchDate(dateStr, btn) {
+  // 高亮按钮
+  document.querySelectorAll('.dbar-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // 更新页面标题日期
+  const d = new Date(dateStr);
+  const label = `${d.getMonth()+1}月${d.getDate()}日`;
+
+  // 检查是否有该日期的历史备份数据
+  // 目前静态版本：非当天提示，当天正常显示
+  const todayStr = getRecentTradingDays(1)[0].toISOString().slice(0,10);
+  if (dateStr !== todayStr) {
+    showDateToast(label);
+  }
+}
+
+function showDateToast(label) {
+  // 移除旧toast
+  const old = document.getElementById('date-toast');
+  if (old) old.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'date-toast';
+  toast.style.cssText = `
+    position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
+    background:rgba(24,24,27,.85); color:#fff; padding:8px 18px;
+    border-radius:8px; font-size:13px; z-index:9999;
+    backdrop-filter:blur(6px); white-space:nowrap;
+    animation: fadeInUp .2s ease;
+  `;
+  toast.innerHTML = `📅 ${label} · 历史数据功能开发中，敬请期待`;
+
+  // 加动画keyframe（只加一次）
+  if (!document.getElementById('toast-style')) {
+    const s = document.createElement('style');
+    s.id = 'toast-style';
+    s.textContent = `@keyframes fadeInUp{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}`;
+    document.head.appendChild(s);
+  }
+
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity='0'; toast.style.transition='opacity .3s'; }, 2500);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// ═══════════════════════════════════════════
+// TAB SWITCH
+// ═══════════════════════════════════════════
 function switchTab(name, el) {
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
@@ -1202,6 +1332,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')hideJoinModal()})
 // ═══════════════════════════════════════════
 // BOOT
 // ═══════════════════════════════════════════
+initDatebar();
 renderYanji();
 renderPool();
 renderConcepts();
