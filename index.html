@@ -27,8 +27,11 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--red)}
 .nav-links{display:flex;gap:2px;flex-wrap:wrap}
 .nav-links a{font-size:13px;padding:5px 11px;border-radius:6px;color:var(--text2);cursor:pointer;text-decoration:none;transition:all .15s;white-space:nowrap}
-.nav-links a:hover,.nav-links a.active{background:#f4f4f5;color:var(--text)}
-.nav-links a.active{font-weight:500}
+.nav-links a:hover{background:var(--red);color:#fff}
+.nav-links a.active{background:var(--red);color:#fff;font-weight:500}
+.nav-links a.report-link{color:var(--red);font-weight:500}
+.nav-links a.report-link:hover{background:var(--red);color:#fff}
+.nav-links a.report-link.active{background:var(--red);color:#fff}
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
 .date-selector{display:flex;gap:5px;flex-wrap:wrap}
 .date-btn{font-size:12px;font-family:var(--mono);padding:3px 9px;border-radius:4px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .15s}
@@ -40,12 +43,11 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 
 /* ── 日期导航栏 ── */
 .datebar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:52px;z-index:90}
-.datebar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:50px;gap:8px}
-.datebar-arrow{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--text2);flex-shrink:0;transition:all .15s;user-select:none}
-.datebar-arrow:hover{border-color:var(--text3);color:var(--text);background:#f4f4f5}
-.datebar-scroll{display:flex;align-items:center;gap:4px;overflow-x:auto;flex:1;scrollbar-width:none;padding:4px 0;scroll-behavior:smooth}
+.datebar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:50px;gap:0}
+
+.datebar-scroll{display:flex;align-items:center;gap:4px;width:100%;overflow-x:auto;scrollbar-width:none;padding:4px 0;scroll-behavior:smooth}
 .datebar-scroll::-webkit-scrollbar{display:none}
-.dbar-btn{display:flex;flex-direction:column;align-items:center;padding:4px 12px;border-radius:7px;cursor:pointer;border:1px solid var(--border);background:var(--surface);transition:all .15s;white-space:nowrap;flex-shrink:0;font-family:var(--sans);min-width:52px}
+.dbar-btn{display:flex;flex-direction:column;align-items:center;padding:5px 0;border-radius:7px;cursor:pointer;border:1px solid var(--border);background:var(--surface);transition:all .15s;white-space:nowrap;flex-shrink:0;flex:1;font-family:var(--sans);min-width:56px;max-width:80px;text-align:center}
 .dbar-btn:hover{border-color:var(--red);background:#fef9f9}
 .dbar-btn.active{background:var(--text);border-color:var(--text)}
 .dbar-btn .db-md{font-size:12px;font-weight:700;font-family:var(--mono);color:var(--text);line-height:1.3}
@@ -57,7 +59,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .dbar-btn.active.today .db-md{color:#fff}
 .dbar-sep{width:1px;height:24px;background:var(--border);flex-shrink:0;margin:0 3px}
 .datebar-label{font-size:11px;color:var(--text3);white-space:nowrap;flex-shrink:0}
-@media(max-width:768px){.datebar-inner{padding:0 10px;gap:6px}.datebar-label{display:none}.datebar-arrow{width:24px;height:24px}}
+@media(max-width:768px){.datebar-inner{padding:0 10px}.datebar-label{display:none}}
 
 /* page 要给两个sticky留空间 */
 .page{max-width:1280px;margin:0 auto;padding:16px 24px}
@@ -187,7 +189,100 @@ table.qsg tr:hover td{background:#fafafa}
 .chart-legend i{width:20px;height:3px;border-radius:2px;display:inline-block}
 
 /* 研报快讯 */
-/* 研报折叠控制 */
+/* 研报广告轮播 */
+.report-banner{
+  position:relative; overflow:hidden;
+  border-radius:10px; margin-bottom:20px;
+  height:280px; background:var(--surface);
+  border:1px solid var(--border);
+}
+.rb-track{
+  display:flex; height:100%;
+  transition:transform .5s cubic-bezier(.4,0,.2,1);
+}
+.rb-slide{
+  min-width:100%; height:100%;
+  display:flex; align-items:center;
+  cursor:pointer; overflow:hidden;
+  position:relative;
+}
+.rb-slide img{
+  width:100%; height:100%;
+  object-fit:cover; display:block;
+}
+.rb-slide-placeholder{
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:8px;
+  background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);
+  color:#fff;
+}
+.rb-slide-placeholder .rb-tag{
+  font-size:10px; padding:2px 10px; border-radius:10px;
+  background:rgba(227,64,64,.25); color:#fca5a5;
+  border:1px solid rgba(227,64,64,.3); margin-bottom:2px;
+}
+.rb-slide-placeholder .rb-ptitle{
+  font-size:15px; font-weight:600; text-align:center;
+  max-width:480px; line-height:1.4; padding:0 20px;
+}
+.rb-slide-placeholder .rb-psub{
+  font-size:12px; color:rgba(255,255,255,.55);
+  text-align:center; max-width:400px;
+}
+.rb-slide-placeholder .rb-cta{
+  font-size:11px; padding:4px 14px; border-radius:6px;
+  background:var(--red); color:#fff; margin-top:4px;
+}
+.rb-dots{
+  position:absolute; bottom:10px; left:50%;
+  transform:translateX(-50%);
+  display:flex; gap:6px;
+}
+.rb-dot{
+  width:6px; height:6px; border-radius:50%;
+  background:rgba(255,255,255,.4); cursor:pointer;
+  transition:all .2s;
+}
+.rb-dot.active{background:#fff; width:18px; border-radius:3px;}
+.rb-arrow{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:28px; height:28px; border-radius:50%;
+  background:rgba(0,0,0,.3); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:13px; border:none;
+  transition:background .15s; z-index:2;
+}
+.rb-arrow:hover{background:rgba(0,0,0,.55)}
+.rb-arrow.left{left:10px}
+.rb-arrow.right{right:10px}
+
+/* 研报卡片网格模式 */
+.report-grid-view{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:20px}
+@media(max-width:900px){.report-grid-view{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.report-grid-view{grid-template-columns:1fr}}
+.rgv-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .18s;display:flex;flex-direction:column}
+.rgv-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.09);border-color:var(--text3)}
+.rgv-card.featured{border-color:var(--red);box-shadow:0 0 0 1px var(--red)}
+.rgv-thumb{width:100%;aspect-ratio:16/9;overflow:hidden;position:relative;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);flex-shrink:0}
+.rgv-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.rgv-thumb-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:14px}
+.rgv-thumb-placeholder .rgv-ptitle{font-size:12px;font-weight:600;color:#fff;text-align:center;line-height:1.4;max-width:180px}
+.rgv-duration{position:absolute;bottom:7px;right:8px;background:rgba(0,0,0,.75);color:#fff;font-size:10px;font-family:var(--mono);padding:2px 6px;border-radius:4px}
+.rgv-featured-badge{position:absolute;top:8px;left:8px;background:var(--red);color:#fff;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px}
+.rgv-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:5px;flex:1}
+.rgv-insts{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.rgv-date{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.rgv-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rgv-desc{font-size:11px;color:var(--text3);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:4px}
+.rgv-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.rgv-play{font-size:11px;color:var(--red);font-weight:500;display:flex;align-items:center;gap:3px}
+/* 视图切换按钮 */
+.view-toggle{display:flex;gap:4px;margin-left:auto}
+.view-btn{width:30px;height:30px;border-radius:6px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;font-size:14px;color:var(--text3)}
+.view-btn:hover{border-color:var(--text3);color:var(--text)}
+.view-btn.active{background:var(--text);border-color:var(--text);color:#fff}
+
 .report-ctrl{display:flex;align-items:center;gap:8px;margin-bottom:14px}
 .report-ctrl-btn{font-size:12px;padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .15s;font-family:var(--sans)}
 .report-ctrl-btn:hover{border-color:var(--text3);color:var(--text)}
@@ -367,7 +462,7 @@ footer a{color:var(--text3)}
       <a onclick="switchTab('gnb',this)">概念热力矩阵</a>
       <a onclick="switchTab('qsg',this)">强势榜</a>
       <a onclick="switchTab('emotion',this)">情绪曲线</a>
-      <a onclick="switchTab('report',this)">研报快讯</a>
+      <a class="report-link" onclick="switchTab('report',this)">研报快讯</a>
     </nav>
     <div class="topbar-right">
       <button onclick="showJoinModal()" style="background:var(--red);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:13px;font-family:var(--sans);font-weight:500;cursor:pointer;white-space:nowrap;transition:background .15s;flex-shrink:0;" onmouseover="this.style.background='#c02020'" onmouseout="this.style.background='var(--red)'">加入铁粉群</button>
@@ -379,21 +474,24 @@ footer a{color:var(--text3)}
 <!-- 日期导航栏（独立一行） -->
 <div class="datebar" id="datebar">
   <div class="datebar-inner">
-    <span class="datebar-label">交易日期</span>
-    <div class="datebar-arrow" onclick="datebarScroll(-1)" title="往后">◀</div>
     <div class="datebar-scroll" id="datebar-scroll"></div>
-    <div class="datebar-arrow" onclick="datebarScroll(1)" title="往前">▶</div>
   </div>
 </div>
 
 <div class="page">
 
-  <div class="stat-strip">
+  <div class="stat-strip" id="stat-strip">
     <div class="stat-card"><div class="stat-val red">34</div><div class="stat-label">今日涨停总数</div></div>
     <div class="stat-card"><div class="stat-val green">27</div><div class="stat-label">封板成功</div></div>
     <div class="stat-card"><div class="stat-val amber">50+</div><div class="stat-label">炸板数量</div></div>
     <div class="stat-card"><div class="stat-val purple">31%</div><div class="stat-label">首板晋级率</div></div>
     <div class="stat-card"><div class="stat-val blue">7连板</div><div class="stat-label">最高连板·威龙股份</div></div>
+  </div>
+
+  <!-- 研报广告轮播（仅在研报tab显示） -->
+  <div class="report-banner" id="report-banner" style="display:none">
+    <div class="rb-track" id="rb-track"></div>
+    <div class="rb-dots" id="rb-dots"></div>
   </div>
 
   <!-- 雁阵 -->
@@ -503,8 +601,12 @@ footer a{color:var(--text3)}
     <div class="sec-head">机构研报快讯 &nbsp;·&nbsp; 外资投行中国经济观点精译 &nbsp;<span style="font-weight:400;font-size:12px;color:var(--text3)">信息整理，不构成投资建议</span></div>
     <div class="report-ctrl">
       <span style="font-size:12px;color:var(--text3)">时间线：</span>
-      <button class="report-ctrl-btn" onclick="reportExpandAll()">全部展开</button>
+      <button class="report-ctrl-btn" id="btn-expand-all" onclick="reportExpandAll()">全部展开</button>
       <button class="report-ctrl-btn" onclick="reportCollapseAll()">全部收起</button>
+      <div class="view-toggle">
+        <div class="view-btn active" id="vbtn-timeline" onclick="setReportView('timeline',this)" title="时间线视图">☰</div>
+        <div class="view-btn" id="vbtn-grid" onclick="setReportView('grid',this)" title="卡片网格视图">⊞</div>
+      </div>
     </div>
     <div id="report-datenav"></div>
     <div id="report-list"></div>
@@ -737,7 +839,7 @@ function getRecentTradingDays(n) {
 function initDatebar() {
   const scroll = document.getElementById('datebar-scroll');
   // 生成30个交易日，但页面宽度只显示约10个，其余需滑动
-  const tradingDays = getRecentTradingDays(30);
+  const tradingDays = getRecentTradingDays(15);
 
   scroll.innerHTML = tradingDays.map((d, idx) => {
     const dateStr = d.toISOString().slice(0,10);
@@ -747,7 +849,7 @@ function initDatebar() {
     const isToday = idx === 0;
     const isActive = idx === 0;
     // 第10个后加分割线
-    const sepHtml = idx === 10 ? '<div class="dbar-sep"></div>' : '';
+    const sepHtml = '';
     return `${sepHtml}<button class="dbar-btn${isActive?' active':''}${isToday?' today':''}"
       data-date="${dateStr}" onclick="switchDate('${dateStr}',this)" title="${dateStr}">
       <span class="db-md">${m}/${day}</span>
@@ -795,10 +897,108 @@ function switchTab(name, el) {
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   el.classList.add('active');
+  // 研报tab：隐藏stat-strip，显示banner
+  const isReport = name === 'report';
+  document.getElementById('stat-strip').style.display = isReport ? 'none' : '';
+  document.getElementById('report-banner').style.display = isReport ? '' : 'none';
   if (name==='emotion') renderCharts();
   if (name==='gnb') renderGnb();
   if (name==='qsg') renderQsg();
-  if (name==='report') renderReports();
+  if (name==='report') { renderReports(); initBanner(); }
+}
+
+// ═══════════════════════════════════════════
+// 研报广告轮播
+// ═══════════════════════════════════════════
+// 轮播数据：每条对应一篇研报，填 reportId 用于点击跳转
+const BANNER_SLIDES = [
+  {
+    reportId: 'ubs-citi-apr2026',
+    tag: '瑞银 · 花旗 · 2026-05-18',
+    title: '滞胀风险上升 — 4月经济数据大幅低于预期，政策需立刻出手',
+    sub: '官员躺平+以旧换新退坡+PPI大涨，三重压力下中国经济怎么走？',
+    img: '',  // 填图片URL，不填则显示文字版
+  },
+  {
+    reportId: 'jiedujun-newold-economy-2026',
+    tag: '解读君 · 独立宏观 · 2026-05-21',
+    title: '新旧经济"黄金交叉"完成 — 中国宏观分析范式正在重写',
+    sub: '信贷弱≠经济差、出口"以价换量"变"量价双升"，旧逻辑正在失效',
+    img: '',
+  },
+];
+
+let bannerIndex = 0;
+let bannerTimer = null;
+let bannerInited = false;
+
+function initBanner() {
+  if (bannerInited) return;
+  bannerInited = true;
+  const track = document.getElementById('rb-track');
+  const dotsEl = document.getElementById('rb-dots');
+  const banner = document.getElementById('report-banner');
+
+  // 加左右箭头
+  const leftArrow = document.createElement('button');
+  leftArrow.className = 'rb-arrow left';
+  leftArrow.textContent = '‹';
+  leftArrow.onclick = () => bannerGo(-1);
+  const rightArrow = document.createElement('button');
+  rightArrow.className = 'rb-arrow right';
+  rightArrow.textContent = '›';
+  rightArrow.onclick = () => bannerGo(1);
+  banner.appendChild(leftArrow);
+  banner.appendChild(rightArrow);
+
+  // 渲染slides
+  track.innerHTML = BANNER_SLIDES.map((s, i) => {
+    const inner = s.img
+      ? `<img src="${s.img}" alt="${s.title}">`
+      : `<div class="rb-slide-placeholder">
+          <span class="rb-tag">${s.tag}</span>
+          <div class="rb-ptitle">${s.title}</div>
+          <div class="rb-psub">${s.sub}</div>
+          <span class="rb-cta">点击查看完整研报 →</span>
+        </div>`;
+    return `<div class="rb-slide" onclick="bannerClick(${i})">${inner}</div>`;
+  }).join('');
+
+  // 渲染dots
+  dotsEl.innerHTML = BANNER_SLIDES.map((_, i) =>
+    `<div class="rb-dot ${i===0?'active':''}" onclick="bannerGoTo(${i})"></div>`
+  ).join('');
+
+  bannerGoTo(0);
+  bannerTimer = setInterval(() => bannerGo(1), 4000);
+
+  // 鼠标悬停暂停
+  banner.addEventListener('mouseenter', () => clearInterval(bannerTimer));
+  banner.addEventListener('mouseleave', () => {
+    bannerTimer = setInterval(() => bannerGo(1), 4000);
+  });
+}
+
+function bannerGoTo(idx) {
+  bannerIndex = (idx + BANNER_SLIDES.length) % BANNER_SLIDES.length;
+  document.getElementById('rb-track').style.transform = `translateX(-${bannerIndex * 100}%)`;
+  document.querySelectorAll('.rb-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === bannerIndex);
+  });
+}
+function bannerGo(dir) { bannerGoTo(bannerIndex + dir); }
+function bannerClick(idx) {
+  // 点击跳转到对应研报，先切到研报tab，再滚动定位
+  const slide = BANNER_SLIDES[idx];
+  const reportLink = document.querySelector('.report-link');
+  if (reportLink) { switchTab('report', reportLink); }
+  setTimeout(() => {
+    const target = document.getElementById(`report-${REPORTS.find(r=>r.id===slide.reportId)?.date}-${slide.reportId}`);
+    if (target) {
+      const top = target.getBoundingClientRect().top + window.scrollY - 120;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  }, 300);
 }
 
 // ═══════════════════════════════════════════
@@ -1051,6 +1251,9 @@ const REPORTS = [
       {name:'消费品（短期承压）',logic:'以旧换新退坡拖累-2ppts，汽车-15%，等待政策重启',cls:'amber'},
     ],
     risk:'货币政策分歧：瑞银倾向货币财政双发力；花旗认为PPI制约降息，仅10bp象征性操作推至下半年。两家均一致：政策需要现在就动，不能等到7月。',
+    featured: false,  // true=推荐置顶第一行
+    thumb: '',        // 封面图URL，不填则用标题文字版
+    desc: '官员躺平+以旧换新退坡+PPI大涨，三重压力下中国经济4月数据全线低于预期。',
     video:{
       title:'3分钟看懂：瑞银+花旗怎么看4月中国经济',
       duration:'3:20',
@@ -1111,6 +1314,9 @@ const REPORTS = [
       {name:'银行股（谨慎）',logic:'旧经济敞口最重，转型尾巴，净息差压力持续，央行耐心收紧',cls:'amber'},
     ],
     risk:'本文为国内独立宏观研究人士演讲整理，非外资机构研报。核心观点为结构性长期判断，不涉及短期操作建议。K型复苏中低收入群体就业问题是主要社会风险点，政策对冲力度存在不确定性。',
+    featured: true,   // 推荐置顶
+    thumb: '',
+    desc: '2025年新旧经济权重完成历史性翻转，信贷弱≠经济差，旧的分析框架正在失效。',
     video:{
       title:'5分钟看懂：中国新旧经济黄金交叉意味着什么',
       duration:'4:55',
@@ -1218,6 +1424,7 @@ function renderReports() {
           </div>
           <div class="rcard">
             <div class="rcard-header"><div class="rcard-header-left"><div class="rtitle">${r.title}</div></div></div>
+            ${videoHtml}
             <div class="rsection"><div class="rsec-label">核心数据一览</div><div class="rdata-grid">${dataHtml}</div></div>
             ${sectionsHtml}
             <div class="rsection"><div class="rsec-label">A股关联板块</div><div class="rastock-grid">${astockHtml}</div></div>
@@ -1226,7 +1433,6 @@ function renderReports() {
               <span class="rfoot-note">来源：${r.insts.map(i=>i.name).join(' / ')} · ${r.date} · 信息整理，不构成投资建议</span>
               <span class="rfoot-badge">✓ 合规内容</span>
             </div>
-            ${videoHtml}
           </div>
         </div>
       </div>`;
@@ -1287,15 +1493,107 @@ function reportCollapseAll() {
   });
 }
 
+let reportView = 'timeline'; // 'timeline' | 'grid'
+
+function setReportView(view, btn) {
+  reportView = view;
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // 时间线模式：展开/收起按钮可见；网格模式：隐藏
+  const isTimeline = view === 'timeline';
+  document.getElementById('btn-expand-all').parentElement.querySelectorAll('.report-ctrl-btn')
+    .forEach(b => b.style.display = isTimeline ? '' : 'none');
+  // 导航栏仅时间线模式显示
+  document.getElementById('report-datenav').style.display = isTimeline ? '' : 'none';
+  // 重新渲染
+  if (view === 'grid') renderReportGrid();
+  else renderReports();
+}
+
+function renderReportGrid() {
+  const el = document.getElementById('report-list');
+
+  // 推荐的放最前，其余按时间倒序
+  const featured = REPORTS.filter(r => r.featured).sort((a,b) => new Date(b.date)-new Date(a.date));
+  const normal   = REPORTS.filter(r => !r.featured).sort((a,b) => new Date(b.date)-new Date(a.date));
+  const sorted   = [...featured, ...normal];
+
+  const cards = sorted.map((r, idx) => {
+    const d = new Date(r.date);
+    const dateLabel = `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}`;
+    const instBadges = r.insts.map(i=>`<span class="rinst-badge ${i.cls}" style="font-size:10px;padding:1px 7px">${i.name}</span>`).join('');
+    const urgCls = r.urgency==='high'?'urg-high':r.urgency==='mid'?'urg-mid':'urg-low';
+
+    // 封面区域
+    const hasThumb = r.thumb;
+    const hasVideo = r.video && (r.video.embedId || r.video.bvid);
+    const duration = r.video ? r.video.duration : '';
+    const thumbHtml = hasThumb
+      ? `<img src="${r.thumb}" alt="${r.title}">`
+      : `<div class="rgv-thumb-placeholder">
+          <div class="rgv-ptitle">${r.title}</div>
+        </div>`;
+    const durationBadge = duration ? `<div class="rgv-duration">▶ ${duration}</div>` : '';
+    const featuredBadge = r.featured ? `<div class="rgv-featured-badge">⭐ 推荐</div>` : '';
+
+    // 描述文字
+    const desc = r.desc || (r.sections[0]?.points[0] ? r.sections[0].points[0].t.slice(0,60)+'…' : '');
+
+    return `<div class="rgv-card ${r.featured?'featured':''}" onclick="openReportDetail('${r.id}')">
+      <div class="rgv-thumb">
+        ${thumbHtml}
+        ${durationBadge}
+        ${featuredBadge}
+      </div>
+      <div class="rgv-body">
+        <div class="rgv-insts">
+          ${instBadges}
+          <span class="rgv-date">${dateLabel}</span>
+        </div>
+        <div class="rgv-title">${r.title}</div>
+        <div class="rgv-desc">${desc}</div>
+        <div class="rgv-footer">
+          <span class="rurgency ${urgCls}" style="font-size:10px;padding:2px 7px">${r.urgencyLabel}</span>
+          ${hasVideo ? '<span class="rgv-play">▶ 视频解读</span>' : '<span style="font-size:11px;color:var(--text3)">文字版</span>'}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `<div class="report-grid-view">${cards}</div>`;
+}
+
+function openReportDetail(reportId) {
+  // 切换到时间线视图，定位到该研报
+  const timelineBtn = document.getElementById('vbtn-timeline');
+  setReportView('timeline', timelineBtn);
+  setTimeout(() => {
+    const r = REPORTS.find(x => x.id === reportId);
+    if (!r) return;
+    // 展开对应日期组
+    const groupId = `tl-group-${r.date}`;
+    const body = document.getElementById(`body-${groupId}`);
+    const toggle = document.getElementById(`toggle-${groupId}`);
+    if (body && body.classList.contains('collapsed')) {
+      body.classList.remove('collapsed');
+      body.style.maxHeight = '9999px';
+      if (toggle) toggle.style.transform = 'rotate(0deg)';
+    }
+    // 滚动定位
+    const target = document.getElementById(`report-${r.date}-${reportId}`);
+    if (target) {
+      const top = target.getBoundingClientRect().top + window.scrollY - 120;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  }, 200);
+}
+
 function scrollToDate(date, btn) {
-  // 高亮当前按钮
   document.querySelectorAll('.rdnav-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  // 找到该日期第一篇研报的锚点
   const target = document.querySelector(`[id^="report-${date}-"]`);
   if (target) {
-    const offset = 70; // 顶部导航栏高度
-    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+    const top = target.getBoundingClientRect().top + window.scrollY - 110;
     window.scrollTo({ top, behavior: 'smooth' });
   }
 }
