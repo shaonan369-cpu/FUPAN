@@ -39,46 +39,25 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .update-time{font-size:11px;color:var(--text3);font-family:var(--mono);white-space:nowrap}
 
 /* ── 日期导航栏 ── */
-.datebar{
-  background:var(--surface);
-  border-bottom:1px solid var(--border);
-  position:sticky; top:52px; z-index:90;
-}
-.datebar-inner{
-  max-width:1280px; margin:0 auto;
-  padding:0 24px;
-  display:flex; align-items:center;
-  height:46px; gap:12px;
-}
-.datebar-scroll{
-  display:flex; align-items:center; gap:4px;
-  overflow-x:auto; flex:1;
-  scrollbar-width:none; padding:6px 0;
-}
+.datebar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:52px;z-index:90}
+.datebar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:50px;gap:8px}
+.datebar-arrow{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--text2);flex-shrink:0;transition:all .15s;user-select:none}
+.datebar-arrow:hover{border-color:var(--text3);color:var(--text);background:#f4f4f5}
+.datebar-scroll{display:flex;align-items:center;gap:4px;overflow-x:auto;flex:1;scrollbar-width:none;padding:4px 0;scroll-behavior:smooth}
 .datebar-scroll::-webkit-scrollbar{display:none}
-.dbar-btn{
-  display:flex; flex-direction:column; align-items:center;
-  padding:4px 14px; border-radius:7px; cursor:pointer;
-  border:1px solid var(--border); background:var(--surface);
-  transition:all .15s; white-space:nowrap; flex-shrink:0;
-  font-family:var(--sans);
-}
+.dbar-btn{display:flex;flex-direction:column;align-items:center;padding:4px 12px;border-radius:7px;cursor:pointer;border:1px solid var(--border);background:var(--surface);transition:all .15s;white-space:nowrap;flex-shrink:0;font-family:var(--sans);min-width:52px}
 .dbar-btn:hover{border-color:var(--red);background:#fef9f9}
 .dbar-btn.active{background:var(--text);border-color:var(--text)}
-.dbar-btn .db-md{font-size:13px;font-weight:700;font-family:var(--mono);color:var(--text);line-height:1.2}
+.dbar-btn .db-md{font-size:12px;font-weight:700;font-family:var(--mono);color:var(--text);line-height:1.3}
 .dbar-btn.active .db-md{color:#fff}
 .dbar-btn .db-wd{font-size:10px;color:var(--text3);margin-top:1px}
 .dbar-btn.active .db-wd{color:rgba(255,255,255,.55)}
 .dbar-btn.today .db-md{color:var(--red)}
-.dbar-btn.today{border-color:var(--red-border)}
+.dbar-btn.today{border-color:#fca5a5}
 .dbar-btn.active.today .db-md{color:#fff}
-.dbar-sep{width:1px;height:24px;background:var(--border);flex-shrink:0;margin:0 2px}
-.datebar-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.datebar-tip{font-size:11px;color:var(--text3);white-space:nowrap}
-@media(max-width:768px){
-  .datebar-inner{padding:0 10px}
-  .datebar-tip{display:none}
-}
+.dbar-sep{width:1px;height:24px;background:var(--border);flex-shrink:0;margin:0 3px}
+.datebar-label{font-size:11px;color:var(--text3);white-space:nowrap;flex-shrink:0}
+@media(max-width:768px){.datebar-inner{padding:0 10px;gap:6px}.datebar-label{display:none}.datebar-arrow{width:24px;height:24px}}
 
 /* page 要给两个sticky留空间 */
 .page{max-width:1280px;margin:0 auto;padding:16px 24px}
@@ -208,6 +187,19 @@ table.qsg tr:hover td{background:#fafafa}
 .chart-legend i{width:20px;height:3px;border-radius:2px;display:inline-block}
 
 /* 研报快讯 */
+/* 研报折叠控制 */
+.report-ctrl{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.report-ctrl-btn{font-size:12px;padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .15s;font-family:var(--sans)}
+.report-ctrl-btn:hover{border-color:var(--text3);color:var(--text)}
+.tl-group-header{display:flex;align-items:center;gap:10px;padding:12px 0 10px;cursor:pointer;border-bottom:1px solid var(--border);user-select:none}
+.tl-group-header:hover .tl-gh-date{color:var(--text)}
+.tl-gh-date{font-size:15px;font-weight:700;font-family:var(--mono);color:var(--text2);transition:color .15s}
+.tl-gh-count{font-size:11px;color:var(--text3);background:#f4f4f5;padding:2px 8px;border-radius:10px}
+.tl-gh-new{font-size:10px;padding:2px 7px;border-radius:10px;background:#fef2f2;color:var(--red);font-weight:500;border:1px solid #fca5a5}
+.tl-gh-toggle{margin-left:auto;width:22px;height:22px;border-radius:5px;background:#f4f4f5;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text3);transition:transform .25s,background .15s;flex-shrink:0}
+.tl-group-header:hover .tl-gh-toggle{background:var(--border);color:var(--text2)}
+.tl-group-body{overflow:hidden;transition:max-height .35s ease,opacity .25s ease;opacity:1}
+.tl-group-body.collapsed{max-height:0!important;opacity:0;pointer-events:none}
 .report-timeline{display:flex;flex-direction:column;gap:0;margin-bottom:20px}
 .tl-item{display:flex;gap:0;align-items:flex-start}
 .tl-left{display:flex;flex-direction:column;align-items:center;width:72px;min-width:72px;gap:0}
@@ -387,12 +379,10 @@ footer a{color:var(--text3)}
 <!-- 日期导航栏（独立一行） -->
 <div class="datebar" id="datebar">
   <div class="datebar-inner">
-    <div class="datebar-scroll" id="datebar-scroll">
-      <!-- 由JS渲染 -->
-    </div>
-    <div class="datebar-right">
-      <span class="datebar-tip">← 滑动查看更早日期</span>
-    </div>
+    <span class="datebar-label">交易日期</span>
+    <div class="datebar-arrow" onclick="datebarScroll(-1)" title="往后">◀</div>
+    <div class="datebar-scroll" id="datebar-scroll"></div>
+    <div class="datebar-arrow" onclick="datebarScroll(1)" title="往前">▶</div>
   </div>
 </div>
 
@@ -511,6 +501,11 @@ footer a{color:var(--text3)}
   <!-- 研报快讯 -->
   <div id="tab-report" class="tab-panel">
     <div class="sec-head">机构研报快讯 &nbsp;·&nbsp; 外资投行中国经济观点精译 &nbsp;<span style="font-weight:400;font-size:12px;color:var(--text3)">信息整理，不构成投资建议</span></div>
+    <div class="report-ctrl">
+      <span style="font-size:12px;color:var(--text3)">时间线：</span>
+      <button class="report-ctrl-btn" onclick="reportExpandAll()">全部展开</button>
+      <button class="report-ctrl-btn" onclick="reportCollapseAll()">全部收起</button>
+    </div>
     <div id="report-datenav"></div>
     <div id="report-list"></div>
   </div>
@@ -728,15 +723,12 @@ QSG.forEach(r => { r.density = r.days > 0 ? +(r.hits/r.days*100).toFixed(1) : 0;
 // ═══════════════════════════════════════════
 const WEEKDAYS = ['周日','周一','周二','周三','周四','周五','周六'];
 
-// 生成近30个交易日（排除周六日）
 function getRecentTradingDays(n) {
   const days = [];
   const d = new Date();
   while (days.length < n) {
     const wd = d.getDay();
-    if (wd !== 0 && wd !== 6) {
-      days.push(new Date(d));
-    }
+    if (wd !== 0 && wd !== 6) days.push(new Date(d));
     d.setDate(d.getDate() - 1);
   }
   return days;
@@ -744,8 +736,8 @@ function getRecentTradingDays(n) {
 
 function initDatebar() {
   const scroll = document.getElementById('datebar-scroll');
+  // 生成30个交易日，但页面宽度只显示约10个，其余需滑动
   const tradingDays = getRecentTradingDays(30);
-  const todayStr = tradingDays[0].toISOString().slice(0,10);
 
   scroll.innerHTML = tradingDays.map((d, idx) => {
     const dateStr = d.toISOString().slice(0,10);
@@ -754,65 +746,45 @@ function initDatebar() {
     const wd = WEEKDAYS[d.getDay()];
     const isToday = idx === 0;
     const isActive = idx === 0;
-    // 近10天显示，其余可滑动看到
-    const sepHtml = idx === 9 ? '<div class="dbar-sep"></div>' : '';
-    return `${sepHtml}<button class="dbar-btn ${isActive?'active':''} ${isToday?'today':''}"
-      data-date="${dateStr}"
-      onclick="switchDate('${dateStr}', this)"
-      title="${dateStr}">
+    // 第10个后加分割线
+    const sepHtml = idx === 10 ? '<div class="dbar-sep"></div>' : '';
+    return `${sepHtml}<button class="dbar-btn${isActive?' active':''}${isToday?' today':''}"
+      data-date="${dateStr}" onclick="switchDate('${dateStr}',this)" title="${dateStr}">
       <span class="db-md">${m}/${day}</span>
       <span class="db-wd">${wd}</span>
     </button>`;
   }).join('');
 
-  // 第一个按钮（今天）自动滚到最左
+  // 滚到最左（最新日期）
   scroll.scrollLeft = 0;
 }
 
+// 箭头滚动：direction = 1（往左/更早）或 -1（往右/更新）
+function datebarScroll(direction) {
+  const scroll = document.getElementById('datebar-scroll');
+  const btnW = 60; // 约每个按钮宽度
+  scroll.scrollBy({ left: direction * btnW * 3, behavior: 'smooth' });
+}
+
 function switchDate(dateStr, btn) {
-  // 高亮按钮
   document.querySelectorAll('.dbar-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-
-  // 更新页面标题日期
   const d = new Date(dateStr);
   const label = `${d.getMonth()+1}月${d.getDate()}日`;
-
-  // 检查是否有该日期的历史备份数据
-  // 目前静态版本：非当天提示，当天正常显示
   const todayStr = getRecentTradingDays(1)[0].toISOString().slice(0,10);
-  if (dateStr !== todayStr) {
-    showDateToast(label);
-  }
+  if (dateStr !== todayStr) showDateToast(label);
 }
 
 function showDateToast(label) {
-  // 移除旧toast
   const old = document.getElementById('date-toast');
   if (old) old.remove();
-
   const toast = document.createElement('div');
   toast.id = 'date-toast';
-  toast.style.cssText = `
-    position:fixed; bottom:80px; left:50%; transform:translateX(-50%);
-    background:rgba(24,24,27,.85); color:#fff; padding:8px 18px;
-    border-radius:8px; font-size:13px; z-index:9999;
-    backdrop-filter:blur(6px); white-space:nowrap;
-    animation: fadeInUp .2s ease;
-  `;
-  toast.innerHTML = `📅 ${label} · 历史数据功能开发中，敬请期待`;
-
-  // 加动画keyframe（只加一次）
-  if (!document.getElementById('toast-style')) {
-    const s = document.createElement('style');
-    s.id = 'toast-style';
-    s.textContent = `@keyframes fadeInUp{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}`;
-    document.head.appendChild(s);
-  }
-
+  toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(24,24,27,.88);color:#fff;padding:8px 18px;border-radius:8px;font-size:13px;z-index:9999;backdrop-filter:blur(6px);white-space:nowrap;';
+  toast.textContent = `📅 ${label} · 历史数据功能开发中，敬请期待`;
   document.body.appendChild(toast);
-  setTimeout(() => { toast.style.opacity='0'; toast.style.transition='opacity .3s'; }, 2500);
-  setTimeout(() => toast.remove(), 3000);
+  setTimeout(()=>{toast.style.transition='opacity .3s';toast.style.opacity='0';},2500);
+  setTimeout(()=>toast.remove(),3000);
 }
 
 // ═══════════════════════════════════════════
@@ -1154,11 +1126,9 @@ const REPORTS = [
 function renderReports() {
   const el = document.getElementById('report-list');
   const navEl = document.getElementById('report-datenav');
+  const sorted = [...REPORTS].sort((a,b) => new Date(b.date)-new Date(a.date));
 
-  // 按日期从新到旧排序
-  const sorted = [...REPORTS].sort((a,b) => new Date(b.date) - new Date(a.date));
-
-  // 按日期分组统计
+  // 按日期分组
   const dateGroups = {};
   sorted.forEach(r => {
     if (!dateGroups[r.date]) dateGroups[r.date] = [];
@@ -1166,151 +1136,155 @@ function renderReports() {
   });
   const dates = Object.keys(dateGroups).sort((a,b) => new Date(b)-new Date(a));
 
-  // 渲染日期导航栏
-  const navHtml = `
-    <span class="rdnav-label">快速跳转：</span>
-    <div class="rdnav-items">
-      ${dates.map((date, idx) => {
-        const d = new Date(date);
-        const m = (d.getMonth()+1).toString().padStart(2,'0');
-        const day = d.getDate().toString().padStart(2,'0');
-        const count = dateGroups[date].length;
-        const instTypes = [...new Set(dateGroups[date].flatMap(r=>r.insts.map(i=>i.cls)))];
-        const dots = instTypes.slice(0,3).map(()=>'<span></span>').join('');
-        return `<button class="rdnav-btn ${idx===0?'active':''}"
-          onclick="scrollToDate('${date}', this)"
-          title="${date} · ${count}篇研报">
-          <span class="rdn-date">${m}/${day}</span>
-          <span class="rdn-count">${count}篇</span>
-          <span class="rdn-dot">${dots}</span>
-        </button>`;
-      }).join('<div class="rdnav-divider"></div>')}
-    </div>`;
+  // 日期快跳导航
+  const navHtml = `<span class="rdnav-label">快速跳转：</span>
+    <div class="rdnav-items">${dates.map((date,idx)=>{
+      const d=new Date(date);
+      const m=(d.getMonth()+1).toString().padStart(2,'0');
+      const day=d.getDate().toString().padStart(2,'0');
+      const count=dateGroups[date].length;
+      return `<button class="rdnav-btn ${idx===0?'active':''}" onclick="scrollToDate('${date}',this)" title="${date}">
+        <span class="rdn-date">${m}/${day}</span>
+        <span class="rdn-count">${count}篇</span>
+      </button>`;
+    }).join('<div class="rdnav-divider"></div>')}</div>`;
   navEl.innerHTML = `<div class="report-datenav">${navHtml}</div>`;
 
-  // 渲染时间线
-  const timelineHtml = sorted.map((r, idx) => {
-    const d = new Date(r.date);
-    const month = (d.getMonth()+1).toString().padStart(2,'0');
+  // 渲染分组时间线
+  const timelineHtml = dates.map((date, gIdx) => {
+    const d = new Date(date);
+    const m = (d.getMonth()+1).toString().padStart(2,'0');
     const day = d.getDate().toString().padStart(2,'0');
-    const year = d.getFullYear();
-    const isNew = idx === 0;
-    const instBadges = r.insts.map(i=>`<span class="rinst-badge ${i.cls}">${i.name}</span>`).join('');
-    const dataHtml = r.data.map(d=>`
-      <div class="rdata-cell">
+    const wd = WEEKDAYS[d.getDay()];
+    const isLatest = gIdx === 0;
+    const count = dateGroups[date].length;
+    const groupId = `tl-group-${date}`;
+
+    // 组内研报卡片
+    const cardsHtml = dateGroups[date].map((r, rIdx) => {
+      const isNew = gIdx === 0 && rIdx === 0;
+      const instBadges = r.insts.map(i=>`<span class="rinst-badge ${i.cls}">${i.name}</span>`).join('');
+      const dataHtml = r.data.map(d=>`<div class="rdata-cell">
         <div class="rdata-val ${d.cls}">${d.val}</div>
         <div class="rdata-lbl">${d.label}</div>
         <div class="rdiff">${d.diffs.map(x=>`<span class="${x.c}">${x.t}</span>`).join('')}</div>
       </div>`).join('');
-    const sectionsHtml = r.sections.map(s=>`
-      <div class="rsection">
+      const sectionsHtml = r.sections.map(s=>`<div class="rsection">
         <div class="rdivider"><div class="rdiv-line"></div><div class="rdiv-txt">${s.divider}</div><div class="rdiv-line"></div></div>
-        <div class="rpoints" style="margin-top:9px">
-          ${s.points.map(p=>`
-            <div class="rpoint">
-              <div class="rpt-dot ${s.dotCls}"></div>
-              <div class="rpt-text"><b>${p.b}</b>${p.t}</div>
-            </div>`).join('')}
-        </div>
-      </div>`).join('');
-    const astockHtml = r.astocks.map(a=>`
-      <div class="rastock ${a.cls}">
+        <div class="rpoints" style="margin-top:9px">${s.points.map(p=>`
+          <div class="rpoint"><div class="rpt-dot ${s.dotCls}"></div>
+          <div class="rpt-text"><b>${p.b}</b>${p.t}</div></div>`).join('')}
+        </div></div>`).join('');
+      const astockHtml = r.astocks.map(a=>`<div class="rastock ${a.cls}">
         <div class="ras-name">${a.name}</div>
-        <div class="ras-logic">${a.logic}</div>
-      </div>`).join('');
-    const urgCls = r.urgency==='high'?'urg-high':r.urgency==='mid'?'urg-mid':'urg-low';
+        <div class="ras-logic">${a.logic}</div></div>`).join('');
+      const urgCls = r.urgency==='high'?'urg-high':r.urgency==='mid'?'urg-mid':'urg-low';
 
-    // 视频模块
-    let videoHtml = '';
-    if (r.video) {
-      const v = r.video;
-      const hasEmbed = (v.platform==='youtube' && v.embedId) || (v.platform==='bilibili' && v.bvid);
-      const platformLabel = v.platform==='youtube' ? '🎬 YouTube' : '📺 B站';
-      const embedSrc = v.platform==='youtube'
-        ? `https://www.youtube.com/embed/${v.embedId}?rel=0&modestbranding=1`
-        : `https://player.bilibili.com/player.html?bvid=${v.bvid}&high_quality=1&danmaku=0`;
-      const playerHtml = hasEmbed
-        ? `<div class="rvideo-player"><iframe src="${embedSrc}" allowfullscreen></iframe></div>`
-        : `<div class="rvideo-player">
-            <div class="rvideo-placeholder" onclick="this.parentElement.innerHTML='<iframe src=\\'${embedSrc}\\' allowfullscreen style=\\'width:100%;height:100%;border:none\\'></iframe>'">
+      let videoHtml = '';
+      if (r.video) {
+        const v = r.video;
+        const hasEmbed = (v.platform==='youtube'&&v.embedId)||(v.platform==='bilibili'&&v.bvid);
+        const platformLabel = v.platform==='youtube'?'🎬 YouTube':'📺 B站';
+        const embedSrc = v.platform==='youtube'
+          ? `https://www.youtube.com/embed/${v.embedId}?rel=0&modestbranding=1`
+          : `https://player.bilibili.com/player.html?bvid=${v.bvid}&high_quality=1&danmaku=0`;
+        const playerHtml = hasEmbed
+          ? `<div class="rvideo-player"><iframe src="${embedSrc}" allowfullscreen></iframe></div>`
+          : `<div class="rvideo-player"><div class="rvideo-placeholder" onclick="this.parentElement.innerHTML='<iframe src=\\'${embedSrc}\\' allowfullscreen style=\\'width:100%;height:100%;border:none\\'></iframe>'">
               <div class="rvideo-play-btn">▶</div>
               <div class="rvideo-ph-title">${v.title}</div>
               <div class="rvideo-ph-desc">${v.desc}</div>
-              <div class="rvideo-ph-meta">
-                <span class="rvideo-duration">⏱ ${v.duration}</span>
-                <span class="rvideo-platform">${platformLabel}</span>
-              </div>
-            </div>
-          </div>`;
-      const ctaHtml = v.paywall
-        ? `<div class="rvideo-cta">
-            <div class="rvideo-cta-row">
-              <span class="rvideo-paywall-badge">🔒 完整版 · 付费内容</span>
-              <button class="rvideo-btn rvideo-btn-primary" onclick="alert('付费功能即将上线，敬请期待')">解锁完整解读 →</button>
-            </div>
-          </div>`
-        : `<div class="rvideo-cta">
-            <div class="rvideo-cta-row">
-              <span style="font-size:12px;color:var(--text3)">觉得有用？</span>
-              <a class="rvideo-btn rvideo-btn-primary" href="#" onclick="alert('付费订阅功能即将上线')">订阅完整研报解读</a>
-              <a class="rvideo-btn rvideo-btn-secondary" href="#" onclick="alert('进群功能即将上线')">进入交流群</a>
-            </div>
-          </div>`;
-      videoHtml = `<div class="rvideo">
-        <div class="rvideo-inner">
+              <div class="rvideo-ph-meta"><span class="rvideo-duration">⏱ ${v.duration}</span><span class="rvideo-platform">${platformLabel}</span></div>
+            </div></div>`;
+        const ctaHtml = v.paywall
+          ? `<div class="rvideo-cta"><div class="rvideo-cta-row"><span class="rvideo-paywall-badge">🔒 完整版 · 付费内容</span><button class="rvideo-btn rvideo-btn-primary" onclick="alert('付费功能即将上线')">解锁完整解读 →</button></div></div>`
+          : `<div class="rvideo-cta"><div class="rvideo-cta-row"><span style="font-size:12px;color:var(--text3)">觉得有用？</span><a class="rvideo-btn rvideo-btn-primary" href="#" onclick="alert('付费订阅功能即将上线')">订阅完整研报解读</a><a class="rvideo-btn rvideo-btn-secondary" href="#" onclick="alert('进群功能即将上线')">进入交流群</a></div></div>`;
+        videoHtml = `<div class="rvideo"><div class="rvideo-inner">
           <div class="rvideo-label">短视频解读 · ${v.duration}</div>
-          ${playerHtml}
-          ${ctaHtml}
+          ${playerHtml}${ctaHtml}</div></div>`;
+      }
+
+      return `<div class="tl-item" id="report-${r.date}-${r.id}" style="padding-top:${rIdx>0?'12px':'16px'}">
+        <div class="tl-left" style="padding-top:${rIdx>0?'0':'16px'}">
+          ${rIdx===0?`<div class="tl-date-badge"><div class="dy">2026</div><div class="dm">${m}/${day}</div></div>`:'<div style="width:72px"></div>'}
+          <div class="tl-vline"></div>
+        </div>
+        <div class="tl-mid"><div class="tl-node"></div><div class="tl-midline"></div></div>
+        <div class="tl-right" style="padding:${rIdx>0?'0':'12px'} 0 20px 12px">
+          <div class="tl-meta">
+            ${instBadges}
+            ${isNew?'<span class="tl-new">最新</span>':''}
+            <span class="rurgency ${urgCls}" style="font-size:10px;padding:2px 8px">${r.urgencyLabel}</span>
+          </div>
+          <div class="rcard">
+            <div class="rcard-header"><div class="rcard-header-left"><div class="rtitle">${r.title}</div></div></div>
+            <div class="rsection"><div class="rsec-label">核心数据一览</div><div class="rdata-grid">${dataHtml}</div></div>
+            ${sectionsHtml}
+            <div class="rsection"><div class="rsec-label">A股关联板块</div><div class="rastock-grid">${astockHtml}</div></div>
+            <div class="rsection"><div class="rsec-label">机构分歧 / 风险提示</div><div class="rrisk">${r.risk}</div></div>
+            <div class="rcard-footer">
+              <span class="rfoot-note">来源：${r.insts.map(i=>i.name).join(' / ')} · ${r.date} · 信息整理，不构成投资建议</span>
+              <span class="rfoot-badge">✓ 合规内容</span>
+            </div>
+            ${videoHtml}
+          </div>
         </div>
       </div>`;
-    }
-    return `<div class="tl-item" id="report-${r.date}-${r.id}">
-      <div class="tl-left">
-        <div class="tl-date-badge">
-          <div class="dy">${year}</div>
-          <div class="dm">${month}/${day}</div>
-        </div>
-        <div class="tl-vline"></div>
+    }).join('');
+
+    return `<div class="tl-group" id="${groupId}">
+      <div class="tl-group-header" onclick="toggleGroup('${groupId}')">
+        <span class="tl-gh-date">${m}/${day} ${wd}</span>
+        <span class="tl-gh-count">${count} 篇</span>
+        ${isLatest?'<span class="tl-gh-new">最新</span>':''}
+        <span class="tl-gh-toggle" id="toggle-${groupId}">▼</span>
       </div>
-      <div class="tl-mid">
-        <div class="tl-node"></div>
-        <div class="tl-midline"></div>
-      </div>
-      <div class="tl-right">
-        <div class="tl-meta">
-          ${instBadges}
-          ${isNew ? '<span class="tl-new">最新</span>' : ''}
-          <span class="rurgency ${urgCls}" style="font-size:10px;padding:2px 8px">${r.urgencyLabel}</span>
-        </div>
-        <div class="rcard">
-          <div class="rcard-header">
-            <div class="rcard-header-left">
-              <div class="rtitle">${r.title}</div>
-            </div>
-          </div>
-          <div class="rsection">
-            <div class="rsec-label">核心数据一览</div>
-            <div class="rdata-grid">${dataHtml}</div>
-          </div>
-          ${sectionsHtml}
-          <div class="rsection">
-            <div class="rsec-label">A股关联板块</div>
-            <div class="rastock-grid">${astockHtml}</div>
-          </div>
-          <div class="rsection">
-            <div class="rsec-label">机构分歧 / 风险提示</div>
-            <div class="rrisk">${r.risk}</div>
-          </div>
-          <div class="rcard-footer">
-            <span class="rfoot-note">来源：${r.insts.map(i=>i.name).join(' / ')} · ${r.date} · 信息整理，不构成投资建议</span>
-            <span class="rfoot-badge">✓ 合规内容</span>
-          </div>
-          ${videoHtml}
-        </div>
+      <div class="tl-group-body expanded" id="body-${groupId}" style="max-height:9999px">
+        <div class="report-timeline">${cardsHtml}</div>
       </div>
     </div>`;
   }).join('');
-  el.innerHTML = `<div class="report-timeline">${timelineHtml}</div>`;
+
+  el.innerHTML = timelineHtml;
+}
+
+function toggleGroup(groupId) {
+  const body = document.getElementById(`body-${groupId}`);
+  const toggle = document.getElementById(`toggle-${groupId}`);
+  const isCollapsed = body.classList.contains('collapsed');
+  if (isCollapsed) {
+    body.classList.remove('collapsed');
+    body.style.maxHeight = '9999px';
+    toggle.style.transform = 'rotate(0deg)';
+  } else {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      body.classList.add('collapsed');
+      toggle.style.transform = 'rotate(-90deg)';
+    });
+  }
+}
+
+function reportExpandAll() {
+  document.querySelectorAll('.tl-group-body').forEach(body => {
+    const groupId = body.id.replace('body-','');
+    const toggle = document.getElementById(`toggle-${groupId}`);
+    body.classList.remove('collapsed');
+    body.style.maxHeight = '9999px';
+    if (toggle) toggle.style.transform = 'rotate(0deg)';
+  });
+}
+
+function reportCollapseAll() {
+  document.querySelectorAll('.tl-group-body').forEach(body => {
+    const groupId = body.id.replace('body-','');
+    const toggle = document.getElementById(`toggle-${groupId}`);
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      body.classList.add('collapsed');
+      if (toggle) toggle.style.transform = 'rotate(-90deg)';
+    });
+  });
 }
 
 function scrollToDate(date, btn) {
