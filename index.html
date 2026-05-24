@@ -43,11 +43,11 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 
 /* ── 日期导航栏 ── */
 .datebar{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:52px;z-index:90}
-.datebar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:50px;gap:0}
+.datebar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:50px;gap:8px}
 
-.datebar-scroll{display:flex;align-items:center;gap:4px;width:100%;overflow-x:auto;scrollbar-width:none;padding:4px 0;scroll-behavior:smooth}
+.datebar-scroll{display:flex;align-items:center;gap:4px;overflow-x:auto;flex:1;scrollbar-width:none;padding:4px 0;scroll-behavior:smooth}
 .datebar-scroll::-webkit-scrollbar{display:none}
-.dbar-btn{display:flex;flex-direction:column;align-items:center;padding:5px 0;border-radius:7px;cursor:pointer;border:1px solid var(--border);background:var(--surface);transition:all .15s;white-space:nowrap;flex-shrink:0;flex:1;font-family:var(--sans);min-width:56px;max-width:80px;text-align:center}
+.dbar-btn{display:flex;flex-direction:column;align-items:center;padding:5px 14px;border-radius:7px;cursor:pointer;border:1px solid var(--border);background:var(--surface);transition:all .15s;white-space:nowrap;flex-shrink:0;font-family:var(--sans);min-width:58px}
 .dbar-btn:hover{border-color:var(--red);background:#fef9f9}
 .dbar-btn.active{background:var(--text);border-color:var(--text)}
 .dbar-btn .db-md{font-size:12px;font-weight:700;font-family:var(--mono);color:var(--text);line-height:1.3}
@@ -58,8 +58,10 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .dbar-btn.today{border-color:#fca5a5}
 .dbar-btn.active.today .db-md{color:#fff}
 .dbar-sep{width:1px;height:24px;background:var(--border);flex-shrink:0;margin:0 3px}
+.datebar-arrow{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:var(--text2);flex-shrink:0;transition:all .15s;user-select:none}
+.datebar-arrow:hover{border-color:var(--text3);color:var(--text);background:#f4f4f5}
 .datebar-label{font-size:11px;color:var(--text3);white-space:nowrap;flex-shrink:0}
-@media(max-width:768px){.datebar-inner{padding:0 10px}.datebar-label{display:none}}
+@media(max-width:768px){.datebar-inner{padding:0 10px;gap:6px}.datebar-label{display:none}.datebar-arrow{width:24px;height:24px}}
 
 /* page 要给两个sticky留空间 */
 .page{max-width:1280px;margin:0 auto;padding:16px 24px}
@@ -474,7 +476,9 @@ footer a{color:var(--text3)}
 <!-- 日期导航栏（独立一行） -->
 <div class="datebar" id="datebar">
   <div class="datebar-inner">
+    <div class="datebar-arrow" onclick="datebarScroll(-1)">◀</div>
     <div class="datebar-scroll" id="datebar-scroll"></div>
+    <div class="datebar-arrow" onclick="datebarScroll(1)">▶</div>
   </div>
 </div>
 
