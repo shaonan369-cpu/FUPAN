@@ -165,6 +165,21 @@ table.qsg tr:hover td{background:#fafafa}
 .chart-legend i{width:20px;height:3px;border-radius:2px;display:inline-block}
 
 /* 研报快讯 */
+.report-timeline{display:flex;flex-direction:column;gap:0;margin-bottom:20px}
+.tl-item{display:flex;gap:0;align-items:flex-start}
+.tl-left{display:flex;flex-direction:column;align-items:center;width:72px;min-width:72px;gap:0}
+.tl-date-badge{background:var(--text);color:#fff;border-radius:6px;padding:5px 8px;font-family:var(--mono);text-align:center;line-height:1.3;z-index:1;margin-top:16px}
+.tl-date-badge .dy{font-size:10px;opacity:.65}
+.tl-date-badge .dm{font-size:14px;font-weight:700}
+.tl-vline{width:2px;background:var(--border);flex:1;min-height:24px;margin:4px 0}
+.tl-item:last-child .tl-vline{background:transparent}
+.tl-mid{display:flex;flex-direction:column;align-items:center;width:20px;min-width:20px;padding-top:24px}
+.tl-node{width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--red);flex-shrink:0}
+.tl-midline{width:2px;background:var(--border);flex:1;margin-top:4px}
+.tl-item:last-child .tl-midline{background:transparent}
+.tl-right{flex:1;padding:12px 0 28px 12px}
+.tl-meta{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.tl-new{font-size:10px;padding:1px 7px;border-radius:10px;background:#fef2f2;color:var(--red);font-weight:500;border:1px solid #fca5a5}
 .report-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(560px,1fr));gap:16px;margin-bottom:20px}
 .rcard{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .rcard-header{padding:14px 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
@@ -214,6 +229,78 @@ table.qsg tr:hover td{background:#fafafa}
 .rfoot-note{font-size:10px;color:var(--text3)}
 .rfoot-badge{font-size:10px;padding:2px 7px;border-radius:4px;background:#f0fdf4;color:#166534}
 
+/* 铁粉群弹窗 */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.show{opacity:1;pointer-events:all}
+.modal-box{background:var(--surface);border-radius:14px;padding:28px 28px 24px;max-width:360px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2);transform:scale(.95);transition:transform .2s;text-align:center}
+.modal-overlay.show .modal-box{transform:scale(1)}
+.modal-close{position:absolute;top:14px;right:16px;font-size:18px;color:var(--text3);cursor:pointer;background:none;border:none;line-height:1}
+.modal-close:hover{color:var(--text)}
+.modal-icon{font-size:36px;margin-bottom:12px}
+.modal-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:16px}
+.modal-qr{width:160px;height:160px;background:#f4f4f5;border-radius:10px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text3);border:1px dashed var(--border)}
+.modal-perks{background:#fafafa;border-radius:8px;padding:12px 14px;margin-bottom:16px;text-align:left}
+.modal-perks-title{font-size:11px;font-weight:500;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.modal-perk{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text2);margin-bottom:6px;line-height:1.5}
+.modal-perk:last-child{margin-bottom:0}
+.modal-perk-dot{width:5px;height:5px;border-radius:50%;background:var(--red);margin-top:6px;flex-shrink:0}
+.modal-note{font-size:11px;color:var(--text3);line-height:1.5}
+
+.report-datenav{
+  display:flex; align-items:center; gap:0;
+  overflow-x:auto; margin-bottom:20px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:10px 14px;
+  scrollbar-width:none;
+}
+.report-datenav::-webkit-scrollbar{display:none}
+.rdnav-label{font-size:11px;color:var(--text3);white-space:nowrap;margin-right:12px;flex-shrink:0}
+.rdnav-items{display:flex;gap:6px;flex-wrap:nowrap}
+.rdnav-btn{
+  display:flex; flex-direction:column; align-items:center;
+  padding:6px 14px; border-radius:7px; cursor:pointer;
+  border:1px solid var(--border); background:var(--surface);
+  transition:all .15s; white-space:nowrap; flex-shrink:0;
+  text-decoration:none;
+}
+.rdnav-btn:hover{border-color:var(--red);background:#fef2f2}
+.rdnav-btn.active{background:var(--text);border-color:var(--text)}
+.rdnav-btn .rdn-date{font-size:12px;font-family:var(--mono);font-weight:600;color:var(--text)}
+.rdnav-btn.active .rdn-date{color:#fff}
+.rdnav-btn .rdn-count{font-size:10px;color:var(--text3);margin-top:2px}
+.rdnav-btn.active .rdn-count{color:rgba(255,255,255,.65)}
+.rdnav-btn .rdn-dot{display:flex;gap:3px;margin-top:3px}
+.rdnav-btn .rdn-dot span{width:5px;height:5px;border-radius:50%;background:var(--border)}
+.rdnav-btn.active .rdn-dot span{background:rgba(255,255,255,.4)}
+.rdnav-btn:hover .rdn-dot span{background:var(--red-border)}
+.rdnav-divider{width:1px;height:32px;background:var(--border);margin:0 4px;flex-shrink:0;align-self:center}
+
+.rvideo{margin:0;border-top:1px solid var(--border)}
+.rvideo-inner{padding:14px 18px}
+.rvideo-label{font-size:10px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.rvideo-label::before{content:'▶';font-size:9px;color:var(--red)}
+.rvideo-player{border-radius:8px;overflow:hidden;background:#000;position:relative;aspect-ratio:16/9;cursor:pointer}
+.rvideo-player iframe{width:100%;height:100%;border:none;display:block}
+.rvideo-placeholder{width:100%;height:100%;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;cursor:pointer;transition:opacity .2s}
+.rvideo-placeholder:hover{opacity:.9}
+.rvideo-play-btn{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;transition:all .2s}
+.rvideo-placeholder:hover .rvideo-play-btn{background:var(--red);border-color:var(--red);transform:scale(1.05)}
+.rvideo-ph-title{font-size:13px;font-weight:500;color:#fff;text-align:center;line-height:1.4;max-width:320px}
+.rvideo-ph-desc{font-size:11px;color:rgba(255,255,255,.6);text-align:center;line-height:1.5;max-width:320px}
+.rvideo-ph-meta{display:flex;align-items:center;gap:10px;margin-top:4px}
+.rvideo-duration{font-size:11px;font-family:var(--mono);color:rgba(255,255,255,.5);background:rgba(0,0,0,.3);padding:2px 7px;border-radius:4px}
+.rvideo-platform{font-size:10px;color:rgba(255,255,255,.4)}
+.rvideo-cta{margin-top:10px}
+.rvideo-cta-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rvideo-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:6px 14px;border-radius:6px;border:none;cursor:pointer;font-family:var(--sans);font-weight:500;transition:all .15s;text-decoration:none}
+.rvideo-btn-primary{background:var(--red);color:#fff}
+.rvideo-btn-primary:hover{background:#c02020}
+.rvideo-btn-secondary{background:var(--surface);color:var(--text2);border:1px solid var(--border)}
+.rvideo-btn-secondary:hover{border-color:var(--text3);color:var(--text)}
+.rvideo-paywall-badge{font-size:11px;color:var(--amber);display:flex;align-items:center;gap:4px}
+
+
 .back-top{position:fixed;bottom:24px;right:24px;width:36px;height:36px;border-radius:8px;background:var(--text);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .2s;border:none}
 .back-top.visible{opacity:.7}
 .back-top:hover{opacity:1!important}
@@ -249,6 +336,14 @@ footer a{color:var(--text3)}
     </nav>
     <div class="topbar-right">
       <div class="date-selector" id="date-selector"></div>
+      <button onclick="showJoinModal()" style="
+        background:var(--red);color:#fff;border:none;border-radius:6px;
+        padding:6px 14px;font-size:13px;font-family:var(--sans);
+        font-weight:500;cursor:pointer;white-space:nowrap;
+        transition:background .15s;flex-shrink:0;
+      " onmouseover="this.style.background='#c02020'" onmouseout="this.style.background='var(--red)'">
+        加入铁粉群
+      </button>
       <div class="update-time"><span class="update-dot"></span>2026-05-21 20:41</div>
     </div>
   </div>
@@ -369,9 +464,32 @@ footer a{color:var(--text3)}
   <!-- 研报快讯 -->
   <div id="tab-report" class="tab-panel">
     <div class="sec-head">机构研报快讯 &nbsp;·&nbsp; 外资投行中国经济观点精译 &nbsp;<span style="font-weight:400;font-size:12px;color:var(--text3)">信息整理，不构成投资建议</span></div>
+    <div id="report-datenav"></div>
     <div id="report-list"></div>
   </div>
 
+</div>
+
+<div class="modal-overlay" id="join-modal" onclick="if(event.target===this)hideJoinModal()">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="hideJoinModal()">✕</button>
+    <div class="modal-icon">📊</div>
+    <div class="modal-title">加入铁粉群</div>
+    <div class="modal-sub">每周外资机构研报精译<br>第一时间获取宏观信息差</div>
+    <div class="modal-qr" id="modal-qr-box">
+      <!-- 把你的二维码图片地址填在下面 -->
+      <!-- <img src="你的二维码图片链接" style="width:100%;height:100%;object-fit:contain;border-radius:8px"> -->
+      微信二维码<br>即将上线
+    </div>
+    <div class="modal-perks">
+      <div class="modal-perks-title">铁粉群专属权益</div>
+      <div class="modal-perk"><div class="modal-perk-dot"></div>每周3篇外资投行研报精译解读</div>
+      <div class="modal-perk"><div class="modal-perk-dot"></div>配套3-5分钟视频要点提炼</div>
+      <div class="modal-perk"><div class="modal-perk-dot"></div>重要宏观事件第一时间推送</div>
+      <div class="modal-perk"><div class="modal-perk-dot"></div>与作者直接交流提问</div>
+    </div>
+    <div class="modal-note">扫码添加微信，备注"铁粉"即可入群<br>本群内容不构成任何投资建议</div>
+  </div>
 </div>
 
 <footer>本站纯属自用，涉及内容不构成任何买卖建议，据此操作盈亏自负。&nbsp;·&nbsp;<a href="#">免责声明</a>&nbsp;·&nbsp;A股复盘 © 2025</footer>
@@ -831,6 +949,15 @@ const REPORTS = [
       {name:'消费品（短期承压）',logic:'以旧换新退坡拖累-2ppts，汽车-15%，等待政策重启',cls:'amber'},
     ],
     risk:'货币政策分歧：瑞银倾向货币财政双发力；花旗认为PPI制约降息，仅10bp象征性操作推至下半年。两家均一致：政策需要现在就动，不能等到7月。',
+    video:{
+      title:'3分钟看懂：瑞银+花旗怎么看4月中国经济',
+      duration:'3:20',
+      platform:'youtube',
+      embedId:'',  // 填入YouTube视频ID，如 dQw4w9WgXcQ
+      bvid:'',     // 或填入B站BV号，如 BV1xx411c7mD
+      desc:'官员为何集体躺平？滞胀风险真的来了吗？3分钟提炼两大外资投行核心判断。',
+      paywall:false,
+    },
   },
   {
     id:'jiedujun-newold-economy-2026',
@@ -882,12 +1009,62 @@ const REPORTS = [
       {name:'银行股（谨慎）',logic:'旧经济敞口最重，转型尾巴，净息差压力持续，央行耐心收紧',cls:'amber'},
     ],
     risk:'本文为国内独立宏观研究人士演讲整理，非外资机构研报。核心观点为结构性长期判断，不涉及短期操作建议。K型复苏中低收入群体就业问题是主要社会风险点，政策对冲力度存在不确定性。',
+    video:{
+      title:'5分钟看懂：中国新旧经济黄金交叉意味着什么',
+      duration:'4:55',
+      platform:'youtube',
+      embedId:'',  // 填入YouTube视频ID
+      bvid:'',     // 或填入B站BV号
+      desc:'2025年中国经济结构完成历史性翻转，旧的分析框架正在失效。这对A股意味着什么？',
+      paywall:false,
+    },
   }
 ];
 
 function renderReports() {
   const el = document.getElementById('report-list');
-  el.innerHTML = '<div class="report-grid">' + REPORTS.map(r => {
+  const navEl = document.getElementById('report-datenav');
+
+  // 按日期从新到旧排序
+  const sorted = [...REPORTS].sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  // 按日期分组统计
+  const dateGroups = {};
+  sorted.forEach(r => {
+    if (!dateGroups[r.date]) dateGroups[r.date] = [];
+    dateGroups[r.date].push(r);
+  });
+  const dates = Object.keys(dateGroups).sort((a,b) => new Date(b)-new Date(a));
+
+  // 渲染日期导航栏
+  const navHtml = `
+    <span class="rdnav-label">快速跳转：</span>
+    <div class="rdnav-items">
+      ${dates.map((date, idx) => {
+        const d = new Date(date);
+        const m = (d.getMonth()+1).toString().padStart(2,'0');
+        const day = d.getDate().toString().padStart(2,'0');
+        const count = dateGroups[date].length;
+        const instTypes = [...new Set(dateGroups[date].flatMap(r=>r.insts.map(i=>i.cls)))];
+        const dots = instTypes.slice(0,3).map(()=>'<span></span>').join('');
+        return `<button class="rdnav-btn ${idx===0?'active':''}"
+          onclick="scrollToDate('${date}', this)"
+          title="${date} · ${count}篇研报">
+          <span class="rdn-date">${m}/${day}</span>
+          <span class="rdn-count">${count}篇</span>
+          <span class="rdn-dot">${dots}</span>
+        </button>`;
+      }).join('<div class="rdnav-divider"></div>')}
+    </div>`;
+  navEl.innerHTML = `<div class="report-datenav">${navHtml}</div>`;
+
+  // 渲染时间线
+  const timelineHtml = sorted.map((r, idx) => {
+    const d = new Date(r.date);
+    const month = (d.getMonth()+1).toString().padStart(2,'0');
+    const day = d.getDate().toString().padStart(2,'0');
+    const year = d.getFullYear();
+    const isNew = idx === 0;
     const instBadges = r.insts.map(i=>`<span class="rinst-badge ${i.cls}">${i.name}</span>`).join('');
     const dataHtml = r.data.map(d=>`
       <div class="rdata-cell">
@@ -912,34 +1089,115 @@ function renderReports() {
         <div class="ras-logic">${a.logic}</div>
       </div>`).join('');
     const urgCls = r.urgency==='high'?'urg-high':r.urgency==='mid'?'urg-mid':'urg-low';
-    return `<div class="rcard">
-      <div class="rcard-header">
-        <div class="rcard-header-left">
-          <div class="rinst-row">${instBadges}<span class="rdate">${r.date}</span></div>
-          <div class="rtitle">${r.title}</div>
+
+    // 视频模块
+    let videoHtml = '';
+    if (r.video) {
+      const v = r.video;
+      const hasEmbed = (v.platform==='youtube' && v.embedId) || (v.platform==='bilibili' && v.bvid);
+      const platformLabel = v.platform==='youtube' ? '🎬 YouTube' : '📺 B站';
+      const embedSrc = v.platform==='youtube'
+        ? `https://www.youtube.com/embed/${v.embedId}?rel=0&modestbranding=1`
+        : `https://player.bilibili.com/player.html?bvid=${v.bvid}&high_quality=1&danmaku=0`;
+      const playerHtml = hasEmbed
+        ? `<div class="rvideo-player"><iframe src="${embedSrc}" allowfullscreen></iframe></div>`
+        : `<div class="rvideo-player">
+            <div class="rvideo-placeholder" onclick="this.parentElement.innerHTML='<iframe src=\\'${embedSrc}\\' allowfullscreen style=\\'width:100%;height:100%;border:none\\'></iframe>'">
+              <div class="rvideo-play-btn">▶</div>
+              <div class="rvideo-ph-title">${v.title}</div>
+              <div class="rvideo-ph-desc">${v.desc}</div>
+              <div class="rvideo-ph-meta">
+                <span class="rvideo-duration">⏱ ${v.duration}</span>
+                <span class="rvideo-platform">${platformLabel}</span>
+              </div>
+            </div>
+          </div>`;
+      const ctaHtml = v.paywall
+        ? `<div class="rvideo-cta">
+            <div class="rvideo-cta-row">
+              <span class="rvideo-paywall-badge">🔒 完整版 · 付费内容</span>
+              <button class="rvideo-btn rvideo-btn-primary" onclick="alert('付费功能即将上线，敬请期待')">解锁完整解读 →</button>
+            </div>
+          </div>`
+        : `<div class="rvideo-cta">
+            <div class="rvideo-cta-row">
+              <span style="font-size:12px;color:var(--text3)">觉得有用？</span>
+              <a class="rvideo-btn rvideo-btn-primary" href="#" onclick="alert('付费订阅功能即将上线')">订阅完整研报解读</a>
+              <a class="rvideo-btn rvideo-btn-secondary" href="#" onclick="alert('进群功能即将上线')">进入交流群</a>
+            </div>
+          </div>`;
+      videoHtml = `<div class="rvideo">
+        <div class="rvideo-inner">
+          <div class="rvideo-label">短视频解读 · ${v.duration}</div>
+          ${playerHtml}
+          ${ctaHtml}
         </div>
-        <span class="rurgency ${urgCls}">${r.urgencyLabel}</span>
+      </div>`;
+    }
+    return `<div class="tl-item" id="report-${r.date}-${r.id}">
+      <div class="tl-left">
+        <div class="tl-date-badge">
+          <div class="dy">${year}</div>
+          <div class="dm">${month}/${day}</div>
+        </div>
+        <div class="tl-vline"></div>
       </div>
-      <div class="rsection">
-        <div class="rsec-label">核心数据一览</div>
-        <div class="rdata-grid">${dataHtml}</div>
+      <div class="tl-mid">
+        <div class="tl-node"></div>
+        <div class="tl-midline"></div>
       </div>
-      ${sectionsHtml}
-      <div class="rsection">
-        <div class="rsec-label">A股关联板块</div>
-        <div class="rastock-grid">${astockHtml}</div>
-      </div>
-      <div class="rsection">
-        <div class="rsec-label">机构分歧点</div>
-        <div class="rrisk">${r.risk}</div>
-      </div>
-      <div class="rcard-footer">
-        <span class="rfoot-note">来源：${r.insts.map(i=>i.name).join(' / ')} · ${r.date} · 信息整理，不构成投资建议</span>
-        <span class="rfoot-badge">✓ 合规内容</span>
+      <div class="tl-right">
+        <div class="tl-meta">
+          ${instBadges}
+          ${isNew ? '<span class="tl-new">最新</span>' : ''}
+          <span class="rurgency ${urgCls}" style="font-size:10px;padding:2px 8px">${r.urgencyLabel}</span>
+        </div>
+        <div class="rcard">
+          <div class="rcard-header">
+            <div class="rcard-header-left">
+              <div class="rtitle">${r.title}</div>
+            </div>
+          </div>
+          <div class="rsection">
+            <div class="rsec-label">核心数据一览</div>
+            <div class="rdata-grid">${dataHtml}</div>
+          </div>
+          ${sectionsHtml}
+          <div class="rsection">
+            <div class="rsec-label">A股关联板块</div>
+            <div class="rastock-grid">${astockHtml}</div>
+          </div>
+          <div class="rsection">
+            <div class="rsec-label">机构分歧 / 风险提示</div>
+            <div class="rrisk">${r.risk}</div>
+          </div>
+          <div class="rcard-footer">
+            <span class="rfoot-note">来源：${r.insts.map(i=>i.name).join(' / ')} · ${r.date} · 信息整理，不构成投资建议</span>
+            <span class="rfoot-badge">✓ 合规内容</span>
+          </div>
+          ${videoHtml}
+        </div>
       </div>
     </div>`;
-  }).join('') + '</div>';
+  }).join('');
+  el.innerHTML = `<div class="report-timeline">${timelineHtml}</div>`;
 }
+
+function scrollToDate(date, btn) {
+  // 高亮当前按钮
+  document.querySelectorAll('.rdnav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // 找到该日期第一篇研报的锚点
+  const target = document.querySelector(`[id^="report-${date}-"]`);
+  if (target) {
+    const offset = 70; // 顶部导航栏高度
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+}
+function showJoinModal(){document.getElementById('join-modal').classList.add('show')}
+function hideJoinModal(){document.getElementById('join-modal').classList.remove('show')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideJoinModal()})
 
 // ═══════════════════════════════════════════
 // BOOT
